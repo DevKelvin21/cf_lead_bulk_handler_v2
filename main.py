@@ -78,6 +78,7 @@ def generate_random_calls(lead, num_calls, config):
         disposition = DISPOSITION_MAPPING[disposition_abbr]
         term_reason = random.choice(['Customer Ended', 'Agent Ended', 'Timeout'])
         
+        Address = f"{lead.get('Address', '')}, {lead.get('City', '')}, {lead.get('State', '')}, {lead.get('Zip', '')}"
         # Format call data
         call = {
             "Date": call_date.strftime('%Y-%m-%d %H:%M:%S'),
@@ -85,7 +86,7 @@ def generate_random_calls(lead, num_calls, config):
             "LastName": lead.get('LastName', ''),
             "CallNotesFormatted": f"Call with {lead.get('FirstName', 'Unknown')} {lead.get('LastName', 'Unknown')}",
             "Phone": lead.get('Phone', 'Unknown'),
-            "Email": lead.get('Email', 'Unknown'),
+            "Email": lead.get('Email', ''),
             "ListID": config['listID'],  # Use ListID from Firestore config
             "Disposition": disposition,  # Full word from the mapping
             "LeadID": lead.get('LeadID', 0),
@@ -93,6 +94,9 @@ def generate_random_calls(lead, num_calls, config):
             "TermReasonFormatted": term_reason,
             "SubscriberIDFormatted": lead.get('SubscriberIDFormatted', 'Unknown'),
             "ListDescriptionFormatted": config['ClientName'],  # Use ClientName from Firestore config
+            "Source": lead.get('Source', ''),
+            "LeadType": lead.get('LeadType', ''),
+            "Address": Address,
         }
         calls.append(call)
     return calls
